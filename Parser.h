@@ -11,6 +11,10 @@
 //**************************************************************************************************
 // Includes
 //**************************************************************************************************
+
+#ifndef H_PARSER
+#define H_PARSER
+
 #include <fstream>      // Files
 #include <stdint.h>     // Unsigned integers
 #include <string>       // String works
@@ -29,11 +33,19 @@
 #define MAX_SUBSTRING_LENGTH 0x20       // MAximum string element's length
 #define MAX_STRING_LENGTH_ASCII 0xFF    // Maximum string length - 255 symbols
 
+#define HEADER_IS_NEEDED        // Line for enabling instruction header in a txt log
+
 enum ARGS
 {
     PROGRAM_NAME = 0,
-    PATH_POS,
-    DIV_SYMB_POS,
+    INPUT_PATH,
+    OUTPUT_PATH,
+    SETTING_PATH
+};
+
+enum SETTINGS
+{
+    DIVIDION_SYMBOL = 0,
     ID_POS,
     TIME_POS,
     DATA_LEN_POS,
@@ -70,13 +82,17 @@ struct dataString          // Useful data structure ID-DATA-TIME
 
 class Parser        // Class that is inherited by other Parse classes
 {
+    private:
+        static byteString StringToByte(std::string Input);      // Strings with data only convertation
     public:       
+        static dataString StringToDataString(std::string BuffPtr, char DividionSymbol, const uint8_t timePos, const uint8_t IDPos, const uint8_t dataLen, const uint8_t dataPos);
         static void byteStringOut(byteString Out);  // Console outputs
         static void dataStringOut(dataString Out);
 
         static char* ReadFile(const char* path, uint64_t& fileLength);  // text file input
         static dataString* ReadDataString(const char* path, char DividionSymbol, uint8_t timePos, uint8_t IDPos, uint8_t dataLenPos, uint8_t dataPos, uint64_t& size);
-        
-        static byteString StringToByte(std::string Input);      // Strings with data only convertation
-        static dataString StringToDataString(std::string BuffPtr, char DividionSymbol, const uint8_t timePos, const uint8_t IDPos, const uint8_t dataLen, const uint8_t dataPos);
+
+        static uint8_t* ReadSettingsFile (const char* path);
 };
+
+#endif

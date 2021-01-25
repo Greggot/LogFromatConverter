@@ -173,6 +173,10 @@ dataString Parser::StringToDataString(std::string BuffPtr, char DividionSymbol, 
     return Data;
 }
 
+//--------------------------------------------------------------------
+//
+//---------------------------------------------------------------------
+
 dataString* Parser::ReadDataString(const char* path, char DividionSymbol, uint8_t timePos, uint8_t IDPos, uint8_t dataLenPos, uint8_t dataPos, uint64_t& size)
 {
 
@@ -193,4 +197,25 @@ dataString* Parser::ReadDataString(const char* path, char DividionSymbol, uint8_
 
     size = StringNumber;
     return Data;
+}
+
+//------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------
+
+uint8_t* Parser::ReadSettingsFile (const char* path)
+{
+    uint8_t *Settings = new uint8_t [5] {0};
+    std::fstream File;
+    File.open(path);
+
+    char* Temp = new char [3] {' '};
+
+    for (uint8_t i = 0 ; i < 5; i++)
+    {
+        File >> Temp;
+        Settings[i] = std::stoi (Temp, 0, 10);
+    }
+
+    return Settings;
 }
